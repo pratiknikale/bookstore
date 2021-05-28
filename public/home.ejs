@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore Home</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/3e82904521.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/css/homesheet.css">
+
+</head>
+
+<body>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <!-- navbar -->
+                <%- include('partials/navbar') %>
+
+
+                    <div class="demo-gallery mt-5 ml-5">
+                        <ul id="lightgallery" class="list-unstyled row">
+                            <% books.forEach(function(book,epoch=0){ epoch++; %>
+                                <% if(epoch <=(page)*5 && epoch> (page-1)*5 ){ %>
+
+
+
+
+                                    <li class="col-xs-6 col-sm-4 col-md-2 col-lg-2"
+                                        data-responsive="https://sachinchoolur.github.io/lightgallery.js/static/img/1-1600.jpg"
+                                        data-src="https://sachinchoolur.github.io/lightgallery.js/static/img/1-1600.jpg"
+                                        data-sub-html="<h4>Fading Light</h4><p>Classic view from Rigwood Jetty on Coniston Water an old archive shot similar to an old post but a little later on.</p>">
+                                        <a>
+                                            <img class="img-responsive" src="/uploads/<%- book.cover %>"
+                                                data-toggle="modal"
+                                                data-target="#myModal<%- book.bookname.replace(/[^A-Z0-9]/ig,'-');%>">
+                                        </a>
+                                        <h3 style="text-align: center; font-size: 17px; color: white; ">
+                                            <%- book.bookname %>
+                                        </h3>
+                                    </li>
+
+                                    <div class="modal fade" id="myModal<%- book.bookname.replace(/[^A-Z0-9]/ig,'-');%>"
+                                        role="dialog">
+                                        <div class="modal-dialog modal-lg">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-dark" style="color:white;">
+                                                    <h4 class="modal-title">
+                                                        <%- book.bookname%>
+                                                    </h4>
+                                                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4"><img class="responsive shadow p-2"
+                                                                src="/uploads/<%- book.cover %>"
+                                                                style="max-width: 250px;"></div>
+                                                        <div class="col-md-8">
+                                                            <p><b>Author :</b>
+                                                                <%- book.author%>.
+                                                            </p>
+                                                            <br>
+                                                            <span>
+                                                                <%- book.info %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <p>Some text in the modal.</p> -->
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary btn-default" onclick="(function(){
+                                        var cartHistory = localStorage.getItem('cart');
+                                        if(cartHistory == null || cartHistory == undefined){
+                                            var newCart = '';
+                                            newCart = '<%- book._id %>';
+                                            console.log('new',newCart)
+                                            localStorage.setItem('cart',newCart.toString());
+                                        }
+                                        else{
+                                            console.log('renew');
+
+                                            cartHistory += ';'+'<%- book._id %>';
+                                            localStorage.setItem('cart',cartHistory);
+                                        }
+                                        
+
+                                        console.log(localStorage.getItem('cart'));
+                                        return false;})();return false;" data-dismiss="modal">Add to Cart</button>
+                                                    <!-- <button type="button" class="btn btn-primary">View Cart</button> -->
+                                                    <button type="button" class="btn btn-dark btn-default"
+                                                        data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                                        <% }) %>
+                        </ul>
+                        <br>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination row d-flex justify-content-center">
+                                <% for(var i=1;i<=(books.length%5==0?books.length/5:books.length/5+1);i++){ %>
+                                    <!-- <li class="page-item"><a class="page-link" href=""><%- i %></a></li> -->
+                                    <li class="page-item"><button class="page-link" onclick="(function (btn = '<%- i%>'){
+                                     
+                                     var iBtn=parseInt(btn);
+                                     window.location.href='/home?page='+iBtn
+                                     return false;
+                                  })();return false;" href="">
+                                            <%- i %>
+                                        </button></li>
+                                    <% } %>
+                            </ul>
+
+                        </nav>
+
+
+
+
+
+
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

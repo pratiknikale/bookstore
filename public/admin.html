@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore Admin page</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/css/adminsheet.css">
+</head>
+
+<body>
+
+    <div class="container register-form mt-5">
+        <div class="form" style="box-shadow: 0px 8px 40px 2px #888888;">
+            <div class="note">
+                <p>Upload new book</p>
+            </div>
+
+            <form action="/admin/data" method="POST" enctype="multipart/form-data">
+                <div class="form-content">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <input type="text" name="bookname" class="form-control" placeholder="Book Name"
+                                    value="">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="author" class="form-control" placeholder="Author Name"
+                                    value="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="genre" class="form-control" placeholder="Genre" value="">
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="cover" style="cursor: pointer;">
+                                    <label class="custom-file-label">Book Cover Image</label>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="book-pdf"
+                                        style="cursor: pointer;">
+                                    <label class="custom-file-label">Book PDF</label>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <!-- <input type="text-area" name="genere" class="form-control" placeholder="Genere" value=""> -->
+                                <textarea name="info" class="form-control" placeholder="Book Information"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" name="price" class="form-control" placeholder="Price">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <br>
+                    <button type="button" class="btn btn-danger">
+                        <a href="./home" style="color: white; text-decoration: none;">Go to home page</a>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/3e82904521.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/homesheet.css">
+
+</head>
+
+<body style="margin-bottom: 100px;">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- navbar -->
+                <%- include('partials/navbar') %>
+
+
+                    <% var totalPrice=0; %>
+                        <% if(msg=='' ){ %>
+                            <img class="responsive center-block mt-5" src="/images/emptycart.png">
+
+                            <% } else{ %>
+                                <% books.forEach(function(book){ %>
+
+
+                                    <div class="row mt-5">
+                                        <div class="col-md-3"><a>
+                                                <img class="img-responsive shadow p-2" src="/uploads/<%- book.cover %>"
+                                                    style="width: 150px;">
+                                            </a></div>
+                                        <div class="col-md-9" style="color: white;">
+                                            <p><b>Book Name :</b>
+                                                <%- book.bookname %>
+                                                    <!-- remove from cart button -->
+                                                    <button type="button" class="btn btn-danger float-right ml-3"
+                                                        onclick="(function(){
+                                                    var cartHistory = localStorage.getItem('cart');
+                                                    var cartArr = cartHistory.split(';');
+                                                    var cartToPass = [];
+                                                    cartArr.forEach(element => {
+                                            
+                                                        if(element != '<%- book._id %>'){
+                                                            cartToPass.push(element);
+                                                        }
+
+
+                                                    });
+                                                    var modCart = cartToPass.join(';');
+                                                    localStorage.setItem('cart',modCart);
+                                                    if(localStorage.getItem('cart') == undefined || localStorage.getItem('cart') == null || localStorage.getItem('cart') == ''){
+                                                        window.location.href='/cart/noBooks';
+                                                    }
+                                                    else{
+                                                        window.location.href='/cart/'+localStorage.getItem('cart');
+                                                    }
+                                                   
+                                                    return false;})();return false;">&times;</button><br>
+                                                    <span>
+                                                        <%- book.price %> INR
+                                                    </span>
+                                            </p>
+                                            <br>
+                                            <p><b>Author :</b>
+                                                <%- book.author%>.
+                                            </p>
+                                            <br>
+
+                                            <button type="button" class="btn btn-info" data-toggle="collapse"
+                                                data-target="#demo<%- book.bookname.replace(/[^A-Z0-9]/ig,'-');%>">See
+                                                More
+                                                Info</button>
+                                            <div id="demo<%- book.bookname.replace(/[^A-Z0-9]/ig,'-');%>"
+                                                class="collapse">
+                                                <span>
+                                                    <%- book.info %>
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <% totalPrice +=book.price %>
+                                        <% }) %>
+                                            <div style="float: right;">
+                                                <span style="color: white; font-weight:bold;">Total price: </span>
+                                                <input type="text" id="order-amt" value="<%- totalPrice %>"
+                                                    style="text-align: right; color: white; border: none;"
+                                                    size="3" disabled>
+                                                <span style="color: white;">INR</span>
+                                                <br><br>
+                                                <button class="btn btn-primary float-right" id="order-button1"
+                                                    data-toggle="modal" data-target="#myModal">Checkout</button>
+                                            </div>
+
+
+
+                                            <!-- 
+                                                
+                                                <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog modal-lg">
+
+                                                    
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-dark" style="color:white;">
+                                                            <h4 class="modal-title">
+                                                                Order
+                                                            </h4>
+                                                            
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <span><b>Order Id: </b></span><input type="text"
+                                                                        name="" id="rzp-text" value=""
+                                                                        style="border: none;" disabled><br>
+                                                                    <span><B>Amount to be paid: </B>
+                                                                        <%- totalPrice %> INR
+                                                                    </span>
+                                                                </div>
+
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary btn-default"
+                                                            id="rzp-button1" data-dismiss="modal">Checkout</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div> -->
+
+                                            <% } %>
+
+
+            </div>
+        </div>
+    </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        //order and razor-pay payment function
+        document.getElementById("order-button1").onclick = function (e) {
+            var url = "/cart/api/payment/order"
+            var params = {
+                amount: document.getElementById("order-amt").value * 100,
+                currency: "INR",
+                receipt: "bookstore"+Math.random().toString(36).substring(4),
+                payment_capture: '1',
+                payment_status: 'initialized',
+                product: localStorage.getItem('cart'),
+                userId: 1
+            };
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function (res) {
+                if (xmlHttp.readyState === 4) {
+                    res = JSON.parse(xmlHttp.responseText);
+                    // document.getElementById("rzp-text").value = res.sub.id
+                    console.log(res.sub);
+
+                    var options = {
+                        "key": "<%- key %>",
+                        "currency": "INR",
+                        "name": "BOOKSTORE",
+                        "description": "Bookstore Transaction",
+                        "order_id": res.sub.id,
+                        "handler": function (response) {
+                            // document.getElementById('order-pay-id').value = response.razorpay_payment_id;
+                            // document.getElementById('order-id').value = response.razorpay_order_id;
+                            // document.getElementById('order-sig').value = response.razorpay_signature;
+                            var url2 = '/cart/api/payment/verify';
+                            var params2 = {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            };
+                            var xmlHttp2 = new XMLHttpRequest();
+                            xmlHttp2.onreadystatechange = function (res) {
+                                if (xmlHttp2.readyState === 4) {
+                                    alert(xmlHttp2.responseText);
+                                }
+                            }
+                            xmlHttp2.open("POST", url2, true); // false for synchronous request
+                            xmlHttp2.setRequestHeader("Content-type", "application/json");
+                            xmlHttp2.send(JSON.stringify(params2));
+                        },
+                        "theme": {
+                            "color": "#152836"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                    e.preventDefault();
+                    //console.log(e);
+                }
+            }
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-type", "application/json");
+            xmlHttp.send(JSON.stringify(params));
+        }
+
+        //checkout function
+    //     document.getElementById("rzp-button1").onclick = function(e) {
+    //     var options = {
+    //         "key": "<%- key %>",
+    //         "currency": "INR",
+    //         "name": "WTH Coding",
+    //         "description": "WtH Coding Transaction",
+    //         "order_id": document.getElementById("rzp-text").value,
+    //         "handler": function(response) {
+    //             document.getElementById('order-pay-id').value = response.razorpay_payment_id;
+    //             document.getElementById('order-id').value = response.razorpay_order_id;
+    //             document.getElementById('order-sig').value = response.razorpay_signature;
+    //         },
+    //         "theme": {
+    //             "color": "#152836"
+    //         }
+    //     };
+    //     var rzp1 = new Razorpay(options);
+    //     rzp1.open();
+    //     e.preventDefault();
+    // }
+    </script>
+</body>
+
+</html>

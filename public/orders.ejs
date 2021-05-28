@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/3e82904521.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/homesheet.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <!-- navbar -->
+                <%- include('partials/navbar') %>
+
+                <h2>Your Orders</h2>
+
+                <% orders.forEach(function(order){ %>
+
+                    <p style="color: white;"><%- order.receipt %></p><br>
+                    <p style="color: white;"><%- order.payment_status %></p><br><br>
+
+                    <% }) %>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
