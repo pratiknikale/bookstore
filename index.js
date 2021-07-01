@@ -9,7 +9,7 @@ var home = require('./routes/home.js');
 var cart = require('./routes/cart.js');
 var orders = require('./routes/orders.js')
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/bookstore');
+mongoose.connect('mongodb+srv://pratikN:ROLLno256@cluster0.5bld3.mongodb.net/bookstore?retryWrites=true&w=majority');
 var session = require('express-session');
 const dotenv = require('dotenv');
 const cors = require('cors');
